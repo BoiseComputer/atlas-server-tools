@@ -78,10 +78,10 @@ doUpgradeToolsFromCommit(){
 }
 
 doUpgradeToolsFromBranch(){
-  atlasstLatestVersion=`curl -s "https://raw.githubusercontent.com/${atlasstGithubRepo}/${atlasstChannel}/.version"`
+  atlasstLatestVersion="${atlasstVersion}-${atlasstChannel}"
   atlasstLatestCommit=`curl -s "https://api.github.com/repos/${atlasstGithubRepo}/git/refs/heads/${atlasstChannel}" | sed -n 's/^ *"sha": "\(.*\)",.*/\1/p'`
 
-  if [[ "$atlasstLatestVersion" == "404: Not Found" ]]; then
+  if [[ -z $atlasstLatestCommit ]]; then
     echo "Channel '${atlasstChannel}' does not exist"
     echo
     echo "Available channels:"
