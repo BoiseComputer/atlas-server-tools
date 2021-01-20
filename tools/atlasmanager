@@ -3038,24 +3038,27 @@ doBackup(){
 
   echo -e "${NORMAL} Saved ATLAS directory is ${savedir}"
 
+  local mapfilename="${mapname,,}.atlas"
+  local mapfile="${savedir}/${mapfilename}"
+  
+  [ ! -f $mapfile ] && mapfilename="${mapname}.atlas" && mapfile="${savedir}/${mapfilename}"
+
   # ATLAS server uses Write-Unlink-Rename
-  echo -ne "${NORMAL} Copying ATLAS world file (${mapname,,}) "
+  echo -ne "${NORMAL} Copying ATLAS world file (${mapfilename}) "
 
-  local mapfile="${savedir}/${mapname,,}.atlas"
-
-  cp -p "${mapfile}" "${backupdir}/${mapname,,}.atlas"
-  if [ ! -f "${backupdir}/${mapname,,}.atlas" ]; then
+  cp -p "${mapfile}" "${backupdir}/${mapfilename}"
+  if [ ! -f "${backupdir}/${mapfilename}" ]; then
     sleep 2
-    cp -p "${mapfile}" "${backupdir}/${mapname,,}.atlas"
+    cp -p "${mapfile}" "${backupdir}/${mapfilename}"
   fi
-  if [ ! -f "${backupdir}/${mapname,,}.atlas" ]; then
-    cp -p "${mapfile%.atlas}.tmp" "${backupdir}/${mapname,,}.atlas"
-    if [ -f "${backupdir}/${mapname,,}.atlas" ]; then
+  if [ ! -f "${backupdir}/${mapfilename}" ]; then
+    cp -p "${mapfile%.atlas}.tmp" "${backupdir}/${mapfilename}"
+    if [ -f "${backupdir}/${mapfilename}" ]; then
       echo "${NORMAL}\e[68G[  ${YELLOW}WARN${NORMAL}  ]"
       logprint "Saved atlas file not found, but temporary file was"
     else
       echo "${NORMAL}\e[68G[ ${RED}FAILED${NORMAL} ]"
-      cimapfile="$(find "${savedir}" -maxdepth 1 -iname "${mapname,,}.atlas" -or -iname "${mapname,,}.tmp" | head -n1)"
+      cimapfile="$(find "${savedir}" -maxdepth 1 -iname "${mapfilename}" -or -iname "${mapname,,}.tmp" | head -n1)"
       if [ -n "${mapfile}" ]; then
         logprint "Inconsistent casing in map name - ${mapname,,}.atlas does not exist, but ${cimapfile##*/} does"
       else
