@@ -3081,6 +3081,75 @@ doBackup(){
     done
   fi
 
+  # Copy tribe files
+  echo -ne "${NORMAL} Copying tribe files "
+  failedTribes=
+  for f in "${savedir}/"*.arktribe; do
+    cp -p "${f}" "${backupdir}/${f##*/}"
+    
+    if [ ! -f "${backupdir}/${f##*/}" ]; then
+      sleep 2
+      cp -p "${f}" "${backupdir}/${f##*/}"
+    fi
+
+    if [ ! -f "${backupdir}/${f##*/}" ]; then
+      [[ -z $failedTribes ]] && failedTribes="${NORMAL}  Failed to backup tribes:"
+      failedTribes="${failedTribes}\n    ${f}"
+    fi
+  done
+  if [[ ! -z $failedTribes ]]; then
+    echo -e "${NORMAL}\e[68G[  ${YELLOW}WARN${NORMAL}  ]"
+    echo -e $failedTribes
+  else
+    echo -e "${NORMAL}\e[68G[   ${GREEN}OK${NORMAL}   ]"
+  fi
+
+  # Copy player entities files
+  echo -ne "${NORMAL} Copying entities files "
+  failedEntities=
+  for f in "${savedir}/"*.playerentities; do
+    cp -p "${f}" "${backupdir}/${f##*/}"
+    
+    if [ ! -f "${backupdir}/${f##*/}" ]; then
+      sleep 2
+      cp -p "${f}" "${backupdir}/${f##*/}"
+    fi
+
+    if [ ! -f "${backupdir}/${f##*/}" ]; then
+      [[ -z $failedEntities ]] && failedEntities="${NORMAL}  Failed to backup entities:"
+      failedEntities="${failedEntities}\n    ${f}"
+    fi
+  done
+  if [[ ! -z $failedEntities ]]; then
+    echo -e "${NORMAL}\e[68G[  ${YELLOW}WARN${NORMAL}  ]"
+    echo -e $failedEntities
+  else
+    echo -e "${NORMAL}\e[68G[   ${GREEN}OK${NORMAL}   ]"
+  fi
+
+# Copy arkprofile files
+  echo -ne "${NORMAL} Copying arkprofile files "
+  failedProfiles=
+  for f in "${savedir}/"*.arkprofile; do
+    cp -p "${f}" "${backupdir}/${f##*/}"
+    
+    if [ ! -f "${backupdir}/${f##*/}" ]; then
+      sleep 2
+      cp -p "${f}" "${backupdir}/${f##*/}"
+    fi
+
+    if [ ! -f "${backupdir}/${f##*/}" ]; then
+      [[ -z $failedProfiles ]] && failedProfiles="${NORMAL}  Failed to backup profiles:"
+      failedProfiles="${failedProfiles}\n    ${f}"
+    fi
+  done
+  if [[ ! -z $failedProfiles ]]; then
+    echo -e "${NORMAL}\e[68G[  ${YELLOW}WARN${NORMAL}  ]"
+    echo -e $failedProfiles
+  else
+    echo -e "${NORMAL}\e[68G[   ${GREEN}OK${NORMAL}   ]"
+  fi
+
   # Copy atlasmanager.cfg with default instance
   if [ "$instance" == "$defaultinstance" ]; then
     echo -ne "${NORMAL} Copying atlasmanager.cfg "
