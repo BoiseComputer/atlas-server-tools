@@ -3164,6 +3164,9 @@ doBackup(){
   fi
 
   # ATLAS server uses Lock-Truncate-Write-Unlock
+
+  [ ! -d $savedcfgdir ] && savedcfgdir="${saverootdir}/Config/LinuxServer"
+
   echo -ne "${NORMAL} Copying GameUserSettings.ini "
   cp -p "${savedcfgdir}/GameUserSettings.ini" "${backupdir}/GameUserSettings.ini"
   if [ ! -s "${backupdir}/GameUserSettings.ini" ]; then
@@ -3177,8 +3180,7 @@ doBackup(){
   fi
 
 
-   echo -ne "${NORMAL} Copying Game.ini "
-
+  echo -ne "${NORMAL} Copying Game.ini "
   cp -p "${savedcfgdir}/Game.ini" "${backupdir}/Game.ini"
   if [ ! -s "${backupdir}/Game.ini" ]; then
     sleep 2
